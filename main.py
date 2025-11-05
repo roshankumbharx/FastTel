@@ -1,42 +1,52 @@
-# this file contains basic get,put,post and delete operations using fastapi
-
 from fastapi import FastAPI,HTTPException
+from pydantic import BaseModel
+from models import Product
 
 
 app=FastAPI()
 
-@app.get('/')
-def hello():
-    return 'Running from port 8001'
+
+products=[
+    Product(id=1,name='laptop',quantity=5),
+    Product(id=3,name='iphone',quantity=6),
+    Product(id=5,name='earbuds',quantity=2)
+]
 
 
-items={}
-
-
-@app.get('/items/{item_id}')
-def get_item(item_id):
-    if item_id in items:
-        return item_id,items[item_id]
-    else:
-        return 'Item not found'
+@app.get('/products')
+def get_all_product():
     
-@app.post('/items/{item_id}')
-def create_item(item_id,name):
-    items[item_id]=name
-    return {'message':f'item{item_id} created'}
+    return products
 
-@app.put('/items/{item_id}')
-def update_item(item_id,name):
-    if item_id in items:
-        items[item_id]=name
-        return {'message':'item updated'}
-    else:
-        raise HTTPException(status_code=404,detail='item not found')
-    
-@app.delete('/items/{item_id}')
-def delete_item(item_id):
-    if item_id in items:
-        items.pop(item_id)
-        return {'message':'Item deleted Succesfully'}
-    else:
-        raise HTTPException(status_code=404,detail='Item does not exist')
+@app.get('/product/{id}')
+def get_product(id:int):
+    for product in products:
+        if product.id==id:
+            return products
+    return {'product not found'}
+
+@app.post('/product')
+def add_product(product:Product):
+    for p in products:
+        if p.id==product.id:
+            raise HTTPException(status_code=404,detail='id already exists')
+    products.append(product)
+    return product
+
+@app.put('/product')
+def update_product(id:int,product:Product):
+    for i in range(len(products)):
+        if products[i].id==id:
+            products[i]=product
+            return 'Product added successfully'
+    return 'Product not found'   
+
+
+@app.delete('/product')
+def delete_product(id:int):
+    for i in range(len(products)):
+        if products[i].id==id:
+            del products[i]
+            return 'product deleted'
+
+    return 'product not found'

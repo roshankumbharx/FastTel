@@ -1,7 +1,7 @@
 from fastapi import FastAPI,HTTPException
 from models import Product
 import database_model
-from databse import engine
+from databse import engine,session
 
 app = FastAPI()
 
@@ -14,11 +14,17 @@ products = [
     Product(id=5,name='earbuds',quantity=2)
 ]
 
+
+def init_db():
+    db = session()
+    for product in products:
+        db.add(database_model.Product(**product.model_dump()))
+    db.commit()
+
+init_db()
+
 @app.get('/')
-def get_products():
-    #  db = session
-    # query
-    
+def get_products():    
     return products
 
 @app.get('/products/{id}')

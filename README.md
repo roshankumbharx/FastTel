@@ -121,6 +121,3 @@ npm start
 | Swagger UI | http://localhost:8000/docs |
 | ReDoc | http://localhost:8000/redoc |
 
-## ⭐ Show Support
-
-If you like this project, consider **starring the repository** ⭐ on GitHub!

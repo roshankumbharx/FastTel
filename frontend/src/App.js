@@ -24,7 +24,6 @@ function App() {
   const [sortField, setSortField] = useState("id");
   const [sortDirection, setSortDirection] = useState("asc");
 
-  // Auto-dismiss messages after 5 seconds
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => {
@@ -43,7 +42,7 @@ function App() {
     }
   }, [error]);
 
-  // Fetch all products
+
   const fetchProducts = async () => {
     setLoading(true);
     try {
@@ -57,7 +56,7 @@ function App() {
   };
 
   useEffect(() => {
-    // Inline initial fetch to avoid referencing external deps
+
     const run = async () => {
       setLoading(true);
       try {
@@ -72,7 +71,6 @@ function App() {
     run();
   }, []);
 
-  // Handle sorting
   const handleSort = (field) => {
     if (sortField === field) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
@@ -82,11 +80,9 @@ function App() {
     }
   };
 
-  // Derived list with filter and sorting
   const filteredProducts = useMemo(() => {
     let filtered = products;
     
-    // Apply filter
     const q = filter.trim().toLowerCase();
     if (q) {
       filtered = products.filter((p) =>
@@ -95,18 +91,16 @@ function App() {
         p.description?.toLowerCase().includes(q)
       );
     }
-    
-    // Apply sorting
+
     return filtered.sort((a, b) => {
       let aVal = a[sortField];
       let bVal = b[sortField];
       
-      // Handle numeric fields
+
       if (sortField === "id" || sortField === "price" || sortField === "quantity") {
         aVal = Number(aVal);
         bVal = Number(bVal);
       } else {
-        // Handle string fields
         aVal = String(aVal).toLowerCase();
         bVal = String(bVal).toLowerCase();
       }
@@ -117,18 +111,15 @@ function App() {
     });
   }, [products, filter, sortField, sortDirection]);
 
-  // Handle form input
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Reset form
   const resetForm = () => {
     setForm({ id: "", name: "", description: "", price: "", quantity: "" });
     setEditId(null);
   };
 
-  // Create or update product
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -160,7 +151,6 @@ function App() {
     setLoading(false);
   };
 
-  // Edit product
   const handleEdit = (product) => {
     setForm({
       id: product.id,
@@ -174,7 +164,6 @@ function App() {
     setError("");
   };
 
-  // Delete product
   const handleDelete = async (id) => {
     const ok = window.confirm("Delete this product?");
     if (!ok) return;
@@ -199,7 +188,7 @@ function App() {
       <header className="topbar">
         <div className="brand">
           <span className="brand-badge">📦</span>
-          <h1>Telusko Trac</h1>
+          <h1>Crud App</h1>
         </div>
         <div className="top-actions">
           <button className="btn btn-light" onClick={fetchProducts} disabled={loading}>

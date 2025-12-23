@@ -65,7 +65,8 @@ source venv/bin/activate   # On Windows: venv\Scripts\activate
 Install dependencies:
 
 ```bash
-pip install fastapi uvicorn sqlalchemy pydantic pydantic-settings
+pip install -r requirements.txt
+
 ```
 
 Create **.env** file:
